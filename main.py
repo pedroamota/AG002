@@ -34,7 +34,7 @@ def trainTestSplit(data):
 
 def userInput(model):
     # Coletar dados do usuário
-    island = int(input("Digite o código da ilha (Biscoe=1, Dream=2, Torgersen=3): "))
+    island = int(input("Digite o código da ilha (Biscoe=0, Dream=1, Torgersen=2): "))
     sex = int(input("Digite o sexo do pinguim (Fêmea=0, Macho=1): "))
     culmen_length_mm = float(input("Digite o comprimento do culmen em mm: "))
     culmen_depth_mm = float(input("Digite a profundidade do culmen em mm: "))
@@ -53,7 +53,7 @@ def userInput(model):
     
     # Fazer a previsão
     especie = model.predict(novo_dado)
-    mapeamento_reverso = {1: 'Adelie', 2: 'Chinstrap', 3: 'Gentoo'}
+    mapeamento_reverso = {0: 'Adelie', 1: 'Chinstrap', 2: 'Gentoo'}
     print(f'A espécie do pinguim é: {mapeamento_reverso[especie[0]]}')
 
 # Aplicação de conversões e reordenação
