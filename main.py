@@ -32,6 +32,29 @@ def trainTestSplit(data):
 
     return train_test_split(x, y, test_size=0.2, random_state=42)
 
+def userInput(model):
+    # Coletar dados do usuário
+    island = int(input("Digite o código da ilha (Biscoe=1, Dream=2, Torgersen=3): "))
+    sex = int(input("Digite o sexo do pinguim (Fêmea=0, Macho=1): "))
+    culmen_length_mm = float(input("Digite o comprimento do culmen em mm: "))
+    culmen_depth_mm = float(input("Digite a profundidade do culmen em mm: "))
+    flipper_length_mm = float(input("Digite o comprimento da nadadeira em mm: "))
+    body_mass_g = float(input("Digite a massa corporal em gramas: "))
+    
+    # Criar o DataFrame com os dados
+    novo_dado = pd.DataFrame({
+        'island': [island],
+        'sex': [sex],
+        'culmen_length_mm': [culmen_length_mm],
+        'culmen_depth_mm': [culmen_depth_mm],
+        'flipper_length_mm': [flipper_length_mm],
+        'body_mass_g': [body_mass_g]
+    })
+    
+    # Fazer a previsão
+    especie = model.predict(novo_dado)
+    mapeamento_reverso = {1: 'Adelie', 2: 'Chinstrap', 3: 'Gentoo'}
+    print(f'A espécie do pinguim é: {mapeamento_reverso[especie[0]]}')
 
 # Aplicação de conversões e reordenação
 data = convertValues(data)
@@ -45,3 +68,4 @@ model.fit(X_train, y_train)
 # Classificação das amostras de teste e exibição de métricas
 y_pred = model.predict(X_test)
 print(classification_report(y_test, y_pred))
+userInput(model)
