@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report
@@ -26,14 +27,12 @@ def reorderColumns(data):
     return data
 
 def trainTestSplit(data):
-    # Separação dos dados
     x = data.drop('species', axis=1)
     y = data['species']
 
     return train_test_split(x, y, test_size=0.2, random_state=42)
 
 def userInput(model):
-    # Coletar dados do usuário
     island = int(input("Digite o código da ilha (Biscoe=0, Dream=1, Torgersen=2): "))
     sex = int(input("Digite o sexo do pinguim (Fêmea=0, Macho=1): "))
     culmen_length_mm = float(input("Digite o comprimento do culmen em mm: "))
@@ -41,7 +40,6 @@ def userInput(model):
     flipper_length_mm = float(input("Digite o comprimento da nadadeira em mm: "))
     body_mass_g = float(input("Digite a massa corporal em gramas: "))
     
-    # Criar o DataFrame com os dados
     novo_dado = pd.DataFrame({
         'island': [island],
         'sex': [sex],
@@ -51,21 +49,35 @@ def userInput(model):
         'body_mass_g': [body_mass_g]
     })
     
-    # Fazer a previsão
     especie = model.predict(novo_dado)
     mapeamento_reverso = {0: 'Adelie', 1: 'Chinstrap', 2: 'Gentoo'}
     print(f'A espécie do pinguim é: {mapeamento_reverso[especie[0]]}')
 
-# Aplicação de conversões e reordenação
+def showTest(X_test, y_pred):
+    plt.figure(figsize=(10, 6))
+    scatter =  plt.scatter(X_test['culmen_length_mm'], X_test['culmen_depth_mm'], c=y_pred, cmap='viridis', alpha=0.6)
+
+    classes = ['Adelie', 'Chinstrap', 'Gentoo']
+    colors = [scatter.cmap(scatter.norm(value)) for value in range(3)]
+    labels = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=color, markersize=10) for color in colors]
+    plt.legend(labels, classes, title='Espécies Previstas')
+
+    plt.xlabel('Comprimento do Culmen (mm)')
+    plt.ylabel('Profundidade do Culmen (mm)')
+    plt.show()
+
 data = convertValues(data)
 data = reorderColumns(data)
 X_train, X_test, y_train, y_test = trainTestSplit(data)
 
-# Inicialização e treinamento do modelo
+# Treinamento do modelo
 model = DecisionTreeClassifier()
 model.fit(X_train, y_train)
 
 # Classificação das amostras de teste e exibição de métricas
 y_pred = model.predict(X_test)
+
 print(classification_report(y_test, y_pred))
+showTest(X_test, y_pred)
+
 userInput(model)
