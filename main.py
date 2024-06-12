@@ -8,12 +8,11 @@ from sklearn.metrics import classification_report
 data = pd.read_csv('./penguins.csv')
 
 def convertValues(data):
-    # Mapa dos valores
     map_island = {'Biscoe': 0, 'Dream': 1, 'Torgersen': 2}
     map_sex = {'FEMALE': 0, 'MALE': 1}
     map_species = {'Adelie': 0, 'Chinstrap': 1, 'Gentoo': 2}
 
-    # Aplicando o mapeamento
+    # Aplicando o map
     data['island'] = data['island'].map(map_island)
     data['sex'] = data['sex'].map(map_sex)
     data['species'] = data['species'].map(map_species)
@@ -57,6 +56,7 @@ def showTest(X_test, y_pred):
     plt.figure(figsize=(10, 6))
     scatter =  plt.scatter(X_test['culmen_length_mm'], X_test['culmen_depth_mm'], c=y_pred, cmap='viridis', alpha=0.6)
 
+    # Criando a legenda
     classes = ['Adelie', 'Chinstrap', 'Gentoo']
     colors = [scatter.cmap(scatter.norm(value)) for value in range(3)]
     labels = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=color, markersize=10) for color in colors]
@@ -74,10 +74,10 @@ X_train, X_test, y_train, y_test = trainTestSplit(data)
 model = DecisionTreeClassifier()
 model.fit(X_train, y_train)
 
-# Classificação das amostras de teste e exibição de métricas
+# Teste do modelo
 y_pred = model.predict(X_test)
 
 print(classification_report(y_test, y_pred))
-showTest(X_test, y_pred)
 
+showTest(X_test, y_pred)
 userInput(model)
