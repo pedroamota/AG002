@@ -4,7 +4,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report
 
-# Leitura do conjunto de dados
 data = pd.read_csv('./penguins.csv')
 
 def convertValues(data):
